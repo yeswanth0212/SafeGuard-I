@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeGuard AI - Emergency Safety System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- App Navigation -->
+    <nav class="nav glass hidden" id="app-nav">
+        <div style="font-weight: 800; font-size: 20px; color: var(--primary);">SafeGuard AI</div>
+        <div id="nav-user-info" style="display: flex; align-items: center; gap: 12px;">
+            <span id="nav-username"></span>
+            <button class="btn btn-outline" onclick="logout()" style="padding: 6px 12px; font-size: 14px;">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="auth-container glass">
+        <h1 style="margin-bottom: 8px;">Welcome Back</h1>
+        <p style="color: var(--text-dim); margin-bottom: 24px;">Login to your SafeGuard account</p>
+        
+        <input type="text" id="login-username" placeholder="Username">
+        <input type="password" id="login-password" placeholder="Password">
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">Login</button>
+        
+        <p style="margin-top: 24px; text-align: center; font-size: 14px;">
+            Don't have an account? <a href="#" onclick="toggleAuth(true)" style="color: var(--primary);">Register</a>
+        </p>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="register-screen" class="auth-container glass hidden">
+        <h1 style="margin-bottom: 8px;">Create Account</h1>
+        <p style="color: var(--text-dim); margin-bottom: 24px;">Join the safety network</p>
+        
+        <input type="text" id="reg-username" placeholder="Username">
+        <input type="password" id="reg-password" placeholder="Password">
+        <input type="text" id="reg-fullname" placeholder="Full Name">
+        <input type="number" id="reg-age" placeholder="Age">
+        
+        <label style="display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-dim);">Profile Photo</label>
+        <input type="file" id="reg-photo" accept="image/*" style="padding: 8px;">
+        
+        <select id="reg-role">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select>
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="handleRegister()">Register</button>
+        
+        <p style="margin-top: 24px; text-align: center; font-size: 14px;">
+            Already have an account? <a href="#" onclick="toggleAuth(false)" style="color: var(--primary);">Login</a>
+        </p>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="user-dashboard hidden">
+        <div style="margin-top: 40px;">
+            <h1 id="user-welcome">Hello, User</h1>
+            <p id="user-status-text" style="color: var(--text-dim);">Your status: <span id="status-val" class="status-badge status-inactive">INACTIVE</span></p>
+        </div>
+
+        <div class="sos-button-container">
+            <button id="sos-btn" class="sos-btn" onclick="toggleSOS()">SOS</button>
+        </div>
+
+        <div id="sos-active-controls" class="hidden" style="margin-top: 40px;">
+            <p style="color: var(--danger); font-weight: bold; margin-bottom: 16px;">LIVE EMERGENCY TRACKING ACTIVE</p>
+            <div style="width: 240px; aspect-ratio: 16/9; margin: 0 auto 20px; background: #000; border-radius: 12px; overflow: hidden;">
+                <video id="user-preview" autoplay muted playsinline></video>
+            </div>
+            <button class="btn btn-primary" style="background: var(--success);" onclick="toggleSOS()">I'M SAFE</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-layout hidden">
+        <div class="sidebar glass">
+            <h2 style="margin-bottom: 24px;">Active Emergencies</h2>
+            <div id="active-users-list">
+                <!-- User cards will appear here -->
+                <p style="color: var(--text-dim); text-align: center; margin-top: 40px;">No active SOS signals</p>
+            </div>
+        </div>
+        <div class="main-content">
+            <div id="map"></div>
+            
+            <!-- Floating Video Panel -->
+            <div id="floating-video-panel" class="floating-video hidden glass">
+                <div class="video-header">
+                    <span id="active-user-name" style="font-weight: 800;">User Name</span>
+                    <button onclick="closeVideo()" class="btn-close">×</button>
+                </div>
+                <div class="video-body">
+                    <video id="admin-video-large" autoplay playsinline muted></video>
+                    <div class="video-status-overlay">LIVE</div>
+                </div>
+                <div class="video-footer">
+                    <button class="btn btn-primary" onclick="document.getElementById('admin-video-large').muted = false" style="padding: 4px 12px; font-size: 11px;">Enable Audio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
